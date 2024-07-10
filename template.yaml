@@ -1,0 +1,400 @@
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  stageName:
+    Type: String
+    Default: Prod
+  subDomain:
+    Type: String
+    Default: api.opsorbit.me
+  HostedZoneId:
+    Type: String
+    Default: Z03582671PT4B07QGSZZT
+  fullQLSubdomain:
+    Type: String
+    Default: api.opsorbit.me.
+  fullQLDomainName:
+    Type: String
+    Default: opsorbit.me.
+  domainNameParam:
+    Type: String
+    Default: opsorbit.me
+  secretName:
+    Type: String
+    Default: <SECRET_NAME_AWS>
+  senderEmail:
+    Type: String
+    Default: <SENDER_EMAIL>
+  emailRegion:
+    Type: String
+    Default: us-east-1
+  jwtIssuer:
+    Type: String
+    Default: https://securetoken.google.com/
+  authorizerAudience:
+    Type: String
+    Default: <FIREBASE_PROJECT_ID>
+
+Resources:
+
+  #  LambdaRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     ManagedPolicyArns:
+  #       - arn:aws:iam::aws:policy/service-role/AWSLambdaRole
+  #       - arn:aws:iam::aws:policy/AWSLambdaExecute
+  #     AssumeRolePolicyDocument:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - lambda.amazonaws.com
+  #           Action:
+  #             - sts:AssumeRole
+  #     Policies:
+  #       - PolicyName: DynamoDBPolicy
+  #         PolicyDocument:
+  #           Version: '2012-10-17'
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - dynamodb:GetItem
+  #                 - dynamodb:PutItem
+  #                 - dynamodb:UpdateItem
+  #                 - dynamodb:Query
+  #                 - dynamodb:Scan
+  #               Resource:
+  #                 - !GetAtt usertable.Arn
+  #                 - !Sub ${usertable.Arn}/*
+  #       - PolicyName: SecretsManagerPolicy
+  #         PolicyDocument:
+  #           Version: '2012-10-17'
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - secretsmanager:GetSecretValue
+  #               Resource:
+  #                 - arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${secretName}/*
+
+
+  swiftlinkApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: !Sub
+        - ${ResourceName} From Stack ${AWS::StackName}
+        - ResourceName: Api
+      StageName: !Ref stageName
+      Auth:
+        Authorizers:
+          HttpAuthorizer:
+            JwtConfiguration:
+              issuer: !Sub ${jwtIssuer}${authorizerAudience}
+              audience:
+                - !Ref authorizerAudience
+            IdentitySource: $request.header.Authorization
+        DefaultAuthorizer: HttpAuthorizer
+
+  RestApiCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref subDomain
+      DomainValidationOptions:
+        - DomainName: !Ref subDomain
+          HostedZoneId: !Ref HostedZoneId
+      ValidationMethod: DNS
+
+  RestApiDomainName:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: !Ref subDomain
+      DomainNameConfigurations:
+        - CertificateArn: !Ref RestApiCertificate
+          EndpointType: REGIONAL
+
+  ARecorApiDomainRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Ref fullQLDomainName
+      Name: !Ref fullQLSubdomain
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt RestApiDomainName.RegionalDomainName
+        HostedZoneId: !GetAtt RestApiDomainName.RegionalHostedZoneId
+        EvaluateTargetHealth: false
+
+  RestApiMap:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    DependsOn: RestApiDomainName
+    Properties:
+      ApiId: !Ref swiftlinkApi
+      DomainName: !Ref subDomain
+      Stage: !Ref stageName
+
+  swifttable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: shortcode
+          AttributeType: S
+        - AttributeName: createdBy
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: UniqueKeyIndex
+          KeySchema:
+            - AttributeName: shortcode
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: createdByIndex
+          KeySchema:
+            - AttributeName: createdBy
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+  createurl:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: createurl
+      CodeUri: src/createurl
+      Handler: createurl.handler
+      Runtime: python3.9
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Architectures:
+        - arm64
+      Events:
+        swiftlinkApiPOSTcreateurl:
+          Type: HttpApi
+          Properties:
+            Path: /createurl
+            Method: POST
+            ApiId: !Ref swiftlinkApi
+      Environment:
+        Variables:
+          SWIFTTABLE_TABLE_NAME: !Ref swifttable
+          SWIFTTABLE_TABLE_ARN: !GetAtt swifttable.Arn
+          DOMAIN_NAME_PARAM: !Ref domainNameParam
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref swifttable
+  createurlLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${createurl}
+
+  geturl:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: geturl
+      CodeUri: src/geturl
+      Handler: geturl.handler
+      Runtime: python3.9
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Architectures:
+        - arm64
+      Events:
+        swiftlinkApiGETgeturl:
+          Type: HttpApi
+          Properties:
+            Path: /geturl
+            Method: GET
+            ApiId: !Ref swiftlinkApi
+      Environment:
+        Variables:
+          SWIFTTABLE_TABLE_NAME: !Ref swifttable
+          SWIFTTABLE_TABLE_ARN: !GetAtt swifttable.Arn
+          DOMAIN_NAME_PARAM: !Ref domainNameParam
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref swifttable
+  geturlLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${geturl}
+
+  deleteurl:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: deleteurl
+      CodeUri: src/deleteurl
+      Handler: deleteurl.handler
+      Runtime: python3.9
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Architectures:
+        - arm64
+      Events:
+        swiftlinkApiDELETEdeleteurlid:
+          Type: HttpApi
+          Properties:
+            Path: /deleteurl/{id}
+            Method: DELETE
+            ApiId: !Ref swiftlinkApi
+      Environment:
+        Variables:
+          SWIFTTABLE_TABLE_NAME: !Ref swifttable
+          SWIFTTABLE_TABLE_ARN: !GetAtt swifttable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref swifttable
+  deleteurlLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${deleteurl}
+
+  redirecturl:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: redirecturl
+      CodeUri: src/redirecturl
+      Handler: redirecturl.handler
+      Runtime: python3.9
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Architectures:
+        - arm64
+      Events:
+        swiftlinkApiGETredirect:
+          Type: HttpApi
+          Properties:
+            Path: /{short_code}
+            Method: GET
+            ApiId: !Ref swiftlinkApi
+            Auth:
+              Authorizer: NONE
+      Environment:
+        Variables:
+          SWIFTTABLE_TABLE_NAME: !Ref swifttable
+          SWIFTTABLE_TABLE_ARN: !GetAtt swifttable.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref swifttable
+  redirecturlLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${redirecturl}
+
+  signup:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: signup
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaRole
+      CodeUri: src/signup
+      Handler: signup.handler
+      Runtime: python3.9
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Environment:
+        Variables:
+          USER_TABLE_NAME: !Ref user
+          USER_TABLE_ARN: !GetAtt user.Arn
+          SECRET_NAME: !Ref secretName
+          SENDER_EMAIL: !Ref senderEmail
+          EMAIL_REGION: !Ref emailRegion
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref user
+      Layers:
+        - !Ref Layer
+      Events:
+        swiftlinkApiPOSTsignup:
+          Type: HttpApi
+          Properties:
+            Path: /signup
+            Method: POST
+            ApiId: !Ref swiftlinkApi
+            Auth:
+              Authorizer: NONE
+
+  signupLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${signup}
+
+  user:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+
+  Layer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Layer ${ResourceName}
+        - ResourceName: Layer
+      ContentUri: src/Layer
+      RetentionPolicy: Retain
+    Metadata:
+      BuildMethod: python3.9
+
+  login:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: login
+      Role: !Sub arn:aws:iam::${AWS::AccountId}:role/LambdaRole
+      CodeUri: src/login
+      Handler: login.handler
+      Runtime: python3.9
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Environment:
+        Variables:
+          SECRET_NAME: !Ref secretName
+      Layers:
+        - !Ref Layer
+      Events:
+        swiftlinkApiPOSTlogin:
+          Type: HttpApi
+          Properties:
+            Path: /login
+            Method: POST
+            ApiId: !Ref swiftlinkApi
+            Auth:
+              Authorizer: NONE
+
+  loginLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${login}
