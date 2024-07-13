@@ -2,6 +2,18 @@
 
 SwiftLink is a serverless URL shortener service built using AWS Lambda, API Gateway, DynamoDB, AWS Secrets Manager, Route53, AWS Certificate Manager, and JWT Authentication using Firebase. The service provides endpoints for creating, retrieving, and deleting shortened URLs. Additionally, an iOS app built with Swift and SwiftUI interacts with the API to manage URLs.
 
+## Screenshots
+
+
+<img width="370" alt="Screenshot 2024-07-14 at 12 47 39 AM" src="https://github.com/user-attachments/assets/0a4a492a-2731-490d-9b6f-26a43c174d6c">
+
+<img width="382" alt="Create" src="https://github.com/user-attachments/assets/e8523e69-0ee7-43ba-b2ae-0ccf69db709a">
+
+<img width="382" alt="Get" src="https://github.com/user-attachments/assets/17879803-2fcd-4855-9e05-cac16d6f3435">
+
+<img width="378" alt="Delete" src="https://github.com/user-attachments/assets/41260547-c79b-452e-a882-578c7b6295fc">
+
+
 ## Prerequisites
 
 To set up and run this project locally, you will need the following:
@@ -151,17 +163,6 @@ The iOS app is developed using Swift and SwiftUI. It interacts with the serverle
   - **Retrieve URLs:** Display the list of URLs created by the user by triggering the `/geturl` API endpoint in an interactive SwiftUI View with Glass Effect.
   - **Delete URLs:** Delete specific URLs using their ID that stored in DynamoDB.
   - **View:** Implemented Dark and light mode toggle and smooth animantion between pages and Glass Effect in `DeletedView` and `PreviouslyCreatedView` page view.
-
-## Screenshots
-
-
-<img width="370" alt="Screenshot 2024-07-14 at 12 47 39 AM" src="https://github.com/user-attachments/assets/0a4a492a-2731-490d-9b6f-26a43c174d6c">
-
-<img width="382" alt="Create" src="https://github.com/user-attachments/assets/e8523e69-0ee7-43ba-b2ae-0ccf69db709a">
-
-<img width="382" alt="Get" src="https://github.com/user-attachments/assets/17879803-2fcd-4855-9e05-cac16d6f3435">
-
-<img width="378" alt="Delete" src="https://github.com/user-attachments/assets/41260547-c79b-452e-a882-578c7b6295fc">
 
 
 ## Instructions for iOS App
