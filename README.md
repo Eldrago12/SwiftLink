@@ -145,12 +145,23 @@ set up parameters in the `template.yaml` file located in the `src/` directory.
 
 The iOS app is developed using Swift and SwiftUI. It interacts with the serverless API to manage shortened URLs.
 
-**Features**
+## Features
 
   - **Create Shortened URLs:** Use the `/createurl` API ednpoint along with baseurl to create new shortened URLs.
   - **Retrieve URLs:** Display the list of URLs created by the user by triggering the `/geturl` API endpoint in an interactive SwiftUI View with Glass Effect.
   - **Delete URLs:** Delete specific URLs using their ID that stored in DynamoDB.
   - **View:** Implemented Dark and light mode toggle and smooth animantion between pages and Glass Effect in `DeletedView` and `PreviouslyCreatedView` page view.
+
+## Screenshots
+
+<img width="382" alt="HomePage" src="https://github.com/user-attachments/assets/5b510614-a51a-4b8c-a3cf-c2bad075622e">
+
+<img width="382" alt="Create" src="https://github.com/user-attachments/assets/e8523e69-0ee7-43ba-b2ae-0ccf69db709a">
+
+<img width="382" alt="Get" src="https://github.com/user-attachments/assets/17879803-2fcd-4855-9e05-cac16d6f3435">
+
+<img width="378" alt="Delete" src="https://github.com/user-attachments/assets/41260547-c79b-452e-a882-578c7b6295fc">
+
 
 ## Instructions for iOS App
 
