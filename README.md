@@ -49,7 +49,7 @@ To set up and run this project locally, you will need the following:
    sam deploy --guided
    ```
 
-set up parameters in the `template.yaml` file located in the `src/` directory.
+**Set up parameters in the `template.yaml` file located in the `root/` directory.**
 
 
 ## API Endpoints
