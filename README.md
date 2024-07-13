@@ -168,3 +168,11 @@ The iOS app is developed using Swift and SwiftUI. It interacts with the serverle
 
 4. **Build and Run the App:**
    - Build and run the app on your preferred simulator or physical device.
+
+## Contributing
+
+Feel free to contribute to this project by submitting issues or pull requests. Your feedback and contributions are highly appreciated.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
