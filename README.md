@@ -2,6 +2,7 @@
 
 SwiftLink is a serverless URL shortener service built using AWS Lambda, API Gateway, DynamoDB, AWS Secrets Manager, Route53, AWS Certificate Manager, and JWT Authentication using Firebase. The service provides endpoints for creating, retrieving, and deleting shortened URLs. Additionally, an iOS app built with Swift and SwiftUI interacts with the API to manage URLs.
 
+
 ## Screenshots
 
 
@@ -9,7 +10,7 @@ SwiftLink is a serverless URL shortener service built using AWS Lambda, API Gate
 
 <img width="382" alt="Create" src="https://github.com/user-attachments/assets/e8523e69-0ee7-43ba-b2ae-0ccf69db709a">
 
-<img width="382" alt="Get" src="https://github.com/user-attachments/assets/17879803-2fcd-4855-9e05-cac16d6f3435">
+<img width="374" alt="Screenshot 2024-07-14 at 3 37 00 AM" src="https://github.com/user-attachments/assets/59932257-9cb6-4477-b1a3-b6ff4d4c3fce">
 
 <img width="378" alt="Delete" src="https://github.com/user-attachments/assets/41260547-c79b-452e-a882-578c7b6295fc">
 
