@@ -154,7 +154,8 @@ The iOS app is developed using Swift and SwiftUI. It interacts with the serverle
 
 ## Screenshots
 
-<img width="382" alt="HomePage" src="https://github.com/user-attachments/assets/5b510614-a51a-4b8c-a3cf-c2bad075622e">
+
+<img width="343" alt="Screenshot 2024-07-14 at 12 44 23 AM" src="https://github.com/user-attachments/assets/033b4dc0-9446-4c0f-a7b6-40d7ff0b1f12">
 
 <img width="382" alt="Create" src="https://github.com/user-attachments/assets/e8523e69-0ee7-43ba-b2ae-0ccf69db709a">
 
