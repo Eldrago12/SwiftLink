@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DF95BD7C2C3FEE0400EF2D47 /* PreviouslyCreatedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF95BD7B2C3FEE0000EF2D47 /* PreviouslyCreatedView.swift */; };
+		DF95BD7E2C3FEF3000EF2D47 /* CreateNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF95BD7D2C3FEF2D00EF2D47 /* CreateNewView.swift */; };
+		DF95BD802C4002EC00EF2D47 /* DeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF95BD7F2C4002EA00EF2D47 /* DeleteView.swift */; };
+		DF95BD822C400EA500EF2D47 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF95BD812C400EA300EF2D47 /* SidebarView.swift */; };
+		DF95BD842C40253300EF2D47 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF95BD832C40253100EF2D47 /* SignUpView.swift */; };
+		DF95BD862C40254200EF2D47 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF95BD852C40254000EF2D47 /* LoginView.swift */; };
+		DF95BD8B2C42F0AC00EF2D47 /* GlassEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF95BD8A2C42F0AA00EF2D47 /* GlassEffect.swift */; };
 		DFEF61CC2C3E5C3600CAB84C /* SwiftLinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEF61CB2C3E5C3600CAB84C /* SwiftLinkApp.swift */; };
 		DFEF61CE2C3E5C3600CAB84C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEF61CD2C3E5C3600CAB84C /* ContentView.swift */; };
 		DFEF61D02C3E5C3800CAB84C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFEF61CF2C3E5C3800CAB84C /* Assets.xcassets */; };
@@ -15,6 +22,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DF95BD7B2C3FEE0000EF2D47 /* PreviouslyCreatedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviouslyCreatedView.swift; sourceTree = "<group>"; };
+		DF95BD7D2C3FEF2D00EF2D47 /* CreateNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewView.swift; sourceTree = "<group>"; };
+		DF95BD7F2C4002EA00EF2D47 /* DeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteView.swift; sourceTree = "<group>"; };
+		DF95BD812C400EA300EF2D47 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		DF95BD832C40253100EF2D47 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		DF95BD852C40254000EF2D47 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		DF95BD8A2C42F0AA00EF2D47 /* GlassEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassEffect.swift; sourceTree = "<group>"; };
 		DFEF61C82C3E5C3600CAB84C /* SwiftLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFEF61CB2C3E5C3600CAB84C /* SwiftLinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLinkApp.swift; sourceTree = "<group>"; };
 		DFEF61CD2C3E5C3600CAB84C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,9 +67,16 @@
 		DFEF61CA2C3E5C3600CAB84C /* SwiftLink */ = {
 			isa = PBXGroup;
 			children = (
-				DFEF61CB2C3E5C3600CAB84C /* SwiftLinkApp.swift */,
 				DFEF61CD2C3E5C3600CAB84C /* ContentView.swift */,
 				DFEF61D92C3F329100CAB84C /* NetworkManager.swift */,
+				DF95BD7D2C3FEF2D00EF2D47 /* CreateNewView.swift */,
+				DF95BD7B2C3FEE0000EF2D47 /* PreviouslyCreatedView.swift */,
+				DF95BD7F2C4002EA00EF2D47 /* DeleteView.swift */,
+				DF95BD812C400EA300EF2D47 /* SidebarView.swift */,
+				DF95BD832C40253100EF2D47 /* SignUpView.swift */,
+				DF95BD852C40254000EF2D47 /* LoginView.swift */,
+				DF95BD8A2C42F0AA00EF2D47 /* GlassEffect.swift */,
+				DFEF61CB2C3E5C3600CAB84C /* SwiftLinkApp.swift */,
 				DFEF61CF2C3E5C3800CAB84C /* Assets.xcassets */,
 				DFEF61D12C3E5C3800CAB84C /* Preview Content */,
 			);
@@ -142,7 +163,14 @@
 			files = (
 				DFEF61DA2C3F329400CAB84C /* NetworkManager.swift in Sources */,
 				DFEF61CE2C3E5C3600CAB84C /* ContentView.swift in Sources */,
+				DF95BD822C400EA500EF2D47 /* SidebarView.swift in Sources */,
+				DF95BD862C40254200EF2D47 /* LoginView.swift in Sources */,
 				DFEF61CC2C3E5C3600CAB84C /* SwiftLinkApp.swift in Sources */,
+				DF95BD842C40253300EF2D47 /* SignUpView.swift in Sources */,
+				DF95BD802C4002EC00EF2D47 /* DeleteView.swift in Sources */,
+				DF95BD8B2C42F0AC00EF2D47 /* GlassEffect.swift in Sources */,
+				DF95BD7E2C3FEF3000EF2D47 /* CreateNewView.swift in Sources */,
+				DF95BD7C2C3FEE0400EF2D47 /* PreviouslyCreatedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,8 +310,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -311,8 +339,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

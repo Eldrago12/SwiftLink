@@ -1,78 +1,93 @@
-//
-//  ContentView.swift
-//  SwiftLink
-//
-//  Created by SIRSHAK DOLAI on 10/07/24.
-//
-
 import SwiftUI
 
-
 struct ContentView: View {
-    
-    @State private var textInput: String = ""
-    @State private var shortUrl: String = ""
-    @State private var errorMessage: String = ""
-    
+    @State private var showSidebar = false
+    @AppStorage("isDarkMode") private var isDarkMode = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            
-            TextField("Enter original URL", text: $textInput)
-                .padding()
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            Button(action: {
-                Task {
-                    await handleCreateShortUrl()
+        NavigationView {
+            ZStack {
+                // Main content
+                VStack {
+                    Spacer()
+                    Text("Welcome to SwiftLink")
+                        .font(.largeTitle)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .foregroundColor(isDarkMode ? .white : .black)
+
+                    Text("Effortlessly shorten URLs for easy sharing.")
+                        .font(.title2)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .foregroundColor(isDarkMode ? .white : .black)
+
+                    Text("Quick, reliable, and secure URL shortening service.")
+                        .font(.title2)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                        .foregroundColor(isDarkMode ? .white : .black)
+                    Spacer()
                 }
-            }) {
-                Text("Create Short URL")
-            }
-            .padding()
-            
-            
-//            if !shortUrl.isEmpty {
-//                Text("\(shortUrl)")
-//                    .padding()
-//            }
-            if let url = URL(string: shortUrl), !shortUrl.isEmpty {
-                Link("\(shortUrl)", destination: url)
-                    .padding()
-            } else if !shortUrl.isEmpty {
-                Text("\(shortUrl)")
-                    .padding()
-            }
-            
-            
-            if !errorMessage.isEmpty {
-                Text("Error: \(errorMessage)")
-                    .foregroundColor(.red)
-                    .padding()
-            }
-            
-            
-        }
-        .padding()
-    }
+                .background(
+                    // Background image
+                    Image("backgroundImage")
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
+                )
+                .opacity(showSidebar ? 0.3 : 1.0)
+                .animation(.easeInOut(duration: 0.3), value: showSidebar)
 
-    func handleCreateShortUrl() async {
-        do {
-            let shortUrl = try await NetworkManager.shared.createShortUrl(originalUrl: textInput)
-            DispatchQueue.main.async {
-                self.shortUrl = shortUrl
-                self.errorMessage = ""
+                // Sidebar
+                if showSidebar {
+                    SidebarView(isDarkMode: $isDarkMode)
+                        .transition(.move(edge: .leading))
+                }
+
+                // Sidebar toggle button
+                VStack {
+                    HStack {
+                        Button(action: {
+                            withAnimation {
+                                showSidebar.toggle()
+                            }
+                        }) {
+                            Image(systemName: "line.horizontal.3")
+                                .font(.title)
+                                .padding()
+                                .foregroundColor(isDarkMode ? .white : .black)
+                        }
+                        Spacer()
+
+                        // Dark/Light mode toggle button
+                        Button(action: {
+                            withAnimation {
+                                isDarkMode.toggle()
+                            }
+                        }) {
+                            Image(systemName: isDarkMode ? "sun.max.fill" : "moon.fill")
+                                .font(.title)
+                                .padding()
+                                .foregroundColor(isDarkMode ? .white : .black)
+                        }
+                    }
+                    .padding(.top, 40) // Adjust this value to move the buttons lower
+                    Spacer()
+                }
             }
-        } catch {
-            DispatchQueue.main.async {
-                self.errorMessage = "Request failed: \(error.localizedDescription)"
-            }
+            .background(isDarkMode ? Color.black : Color.white)
+            .edgesIgnoringSafeArea(.all)
         }
+        .environment(\.colorScheme, isDarkMode ? .dark : .light)
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
+
+
+
