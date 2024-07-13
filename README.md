@@ -1,2 +1,170 @@
 # SwiftLink
-A Serverless URL Shortener API built using AWS Lambda, Python API Gateway, DynamoDB and presented in an iOS app made using SwiftUI and Swift
+
+SwiftLink is a serverless URL shortener service built using AWS Lambda, API Gateway, DynamoDB, AWS Secrets Manager, Route53, AWS Certificate Manager, and JWT Authentication using Firebase. The service provides endpoints for creating, retrieving, and deleting shortened URLs. Additionally, an iOS app built with Swift and SwiftUI interacts with the API to manage URLs.
+
+## Prerequisites
+
+To set up and run this project locally, you will need the following:
+
+- **Python:** Ensure Python is installed on your machine.
+  
+- **AWS CLI:** Install the AWS Command Line Interface.
+  ```bash
+  pip install awscli
+  ```
+  
+- **AWS SAM CLI:** Install the AWS Serverless Application Model CLI.
+  ```bash
+  pip install aws-sam-cli
+  ```
+  
+- **Docker:** Install Docker to build and run the API locally.
+
+
+## Setup and Build
+
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/Eldrago12/SwiftLink.git
+    cd SwiftLink/src
+    ```
+
+2. **Install AWS SAM CLI (if not already installed):**
+   ```bash
+   pip install aws-sam-cli
+   ```
+
+3. **Build the CloudFormation template:**
+   ```bash
+   sam build
+   ```
+
+4. **Start a local development server:**
+   ```bash
+   sam local start-api
+   ```
+
+5. **Deploy the API to AWS:**
+   ```bash
+   sam deploy --guided
+   ```
+
+set up parameters in the `template.yaml` file located in the `src/` directory.
+
+
+## API Endpoints
+
+- **Sign Up:**
+  ```bash
+  POST https://api.opsorbit.me/signup
+  ```
+  
+  - **Request Body:**
+    ```bash
+    {
+      "email": "string",
+      "password": "string"
+    }
+    ```
+
+- **Login:**
+  ```bash
+  POST https://api.opsorbit.me/login
+  ```
+  
+  - **Request Body:**
+    ```bash
+    {
+      "email": "string",
+      "password": "string"
+    }
+    ```
+
+  - **Response:**
+    ```bash
+    {
+      "idToken": "string",
+      "refreshToken": "string",
+      "expiresIn": "string"
+    }
+    ```
+
+- **Create URL:**
+  ```bash
+  POST https://api.opsorbit.me/createurl
+  ```
+  
+  - **Request Header:**
+    ```bash
+    Authorization: Bearer <idToken>
+    ```
+    - **Request Body:**
+      ```bash
+      {
+        "originalUrl": "string"
+      }
+    - **Response:**
+      ```bash
+      {
+        "shortUrl": "string"
+      }
+
+- **Get URLs:**
+  ```bash
+  GET https://api.opsorbit.me/geturl
+  ```
+  - **Request Header:**
+    ```bash
+    Authorization: Bearer <idToken>
+    ```
+
+- **Delete URL:**
+  ```bash
+  DELETE https://api.opsorbit.me/deleteurl/{id}
+  ```
+  - **Request Header:**
+    ```bash
+    Authorization: Bearer <idToken>
+    ```
+
+## Authentication:
+
+1. **Sign Up:**
+   - Endpoint: `https://api.opsorbit.me/signup`
+   - Register a new user to obtain credentials.
+
+2. **Login:**
+   - Endpoint: `https://api.opsorbit.me/login`
+   - Use the obtained credentials to log in and get the `idToken`.
+  
+3. **Authorization:**
+   - Use the `idToken` as a Bearer token for authorized endpoints (`/createurl`, `/geturl`, `/deleteurl`).
+  
+
+## iOS App
+
+The iOS app is developed using Swift and SwiftUI. It interacts with the serverless API to manage shortened URLs.
+
+**Features**
+
+  - **Create Shortened URLs:** Use the `/createurl` API ednpoint along with baseurl to create new shortened URLs.
+  - **Retrieve URLs:** Display the list of URLs created by the user by triggering the `/geturl` API endpoint in an interactive SwiftUI View with Glass Effect.
+  - **Delete URLs:** Delete specific URLs using their ID that stored in DynamoDB.
+  - **View:** Implemented Dark and light mode toggle and smooth animantion between pages and Glass Effect in `DeletedView` and `PreviouslyCreatedView` page view.
+
+## Instructions for iOS App
+
+1. **Move to Project Directory:**
+   ```bash
+   cd SwiftLink
+   ```
+
+2. **Open the project in Xcode:**
+   ```bash
+   open SwiftLink.xcodeproj
+   ```
+
+3. Open the `ContentView.Swift` file in `SwiftLink` directory to get the UI Structure directly and navigate to other pages. 
+
+4. **Build and Run the App:**
+   - Build and run the app on your preferred simulator or physical device.
